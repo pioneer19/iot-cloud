@@ -1,0 +1,32 @@
+[Unit]
+Description=MQTT client script
+#After=syslog.target
+After=network.target
+Requires=influxdb.service
+Requires=mosquitto.service
+# If using socket activation for main http/s
+###
+#
+#After=gitea.main.socket
+#Requires=gitea.main.socket
+
+[Service]
+#LimitMEMLOCK=infinity
+#LimitNOFILE=65535
+RestartSec=5s
+Type=simple
+User=balalaykajazz
+Group=balalaykajazz
+WorkingDirectory=/usr/bin/sensor
+# If using Unix socket: tells systemd to create the /run/gitea folder, which will contain the gitea.sock file
+# (manually creating /run/gitea doesn't work, because it would not persist across reboots)
+#RuntimeDirectory=gitea
+ExecStart=/usr/bin/sensor/autorun.sh
+Restart=always
+#Environment=USER=git HOME=/home/git GITEA_WORK_DIR=/var/lib/gitea
+#CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+#AmbientCapabilities=CAP_NET_BIND_SERVICE
+###
+
+[Install]
+WantedBy=multi-user.target
