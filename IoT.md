@@ -37,9 +37,11 @@ docker run --rm -p 8086:8086 -v iot_influxdb:/var/lib/influxdb iot_influxdb:1.8
 Подробности тут https://grafana.com/docs/grafana/latest/installation/docker/#custom-image-with-grafana-image-renderer-plugin-pre-installed
 
 ```
-wget https://github.com/grafana/grafana/blob/master/packaging/docker/custom/Dockerfile
-
-docker build -t iot_grafana .
+wget https://raw.githubusercontent.com/grafana/grafana/master/packaging/docker/custom/ubuntu.Dockerfile
+docker build 
+    --build-arg "GRAFANA_VERSION=latest" \
+    --build-arg "GF_INSTALL_IMAGE_RENDERER_PLUGIN=true" \
+    -t iot_grafana -f ubuntu.Dockerfile .
 docker volume create iot_grafana
 
 # copy original data in some folder
