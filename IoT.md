@@ -33,17 +33,12 @@ docker run --rm -p 8086:8086 -v iot_influxdb:/var/lib/influxdb iot_influxdb:1.8
 будет доступен по IP машины.
 
 #### Создание пакета grafana
-Все делается аналогично пакету influx в папке `pod_grafana`.
-
-С установкой графаны в докер есть определенные сложности при наличии плагина рендера.
-Подробности тут https://grafana.com/docs/grafana/latest/installation/docker/#custom-image-with-grafana-image-renderer-plugin-pre-installed
+Образ контейнера grafana создавать не нужно, он используется стандартный с hub.docker.com.
+Нужно лишь скопировать файл запуска для systemd `pod_grafana/docker-grafana.service`.
+Также нужно будет скопировать файл запуска плагина графаны image render
+`pod_grafana_image_renderer/docker-grafana-image-render.service`.
 
 ```
-wget https://raw.githubusercontent.com/grafana/grafana/master/packaging/docker/custom/ubuntu.Dockerfile
-docker build 
-    --build-arg "GRAFANA_VERSION=latest" \
-    --build-arg "GF_INSTALL_IMAGE_RENDERER_PLUGIN=true" \
-    -t iot_grafana -f ubuntu.Dockerfile .
 docker volume create iot_grafana
 
 # copy original data in some folder
@@ -56,7 +51,7 @@ chown -R 472:0   /var/lib/grafana
 # exit from docker
 exit 
 ```
-Контейнер также запускается из systemd.
+Контейнер графаны и плагина image render запускается из systemd.
 
 #### Создание пакета mqtt-client
 MQTT-client самый простой контейнер, в него не нужно пробрасывать порты

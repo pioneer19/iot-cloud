@@ -1,0 +1,18 @@
+[Unit]
+Description=IoT Grafana Image render in docker container
+After=network.target
+Requires=docker.service
+Requires=containerd.service
+
+[Service]
+StandardOutput=null
+StandardError=null
+RestartSec=5s
+Type=simple
+User=root
+Group=root
+ExecStart=docker run --rm -p 192.168.16.10:8081:8081 --name iot_grafana_image_render grafana/grafana-image-renderer:latest
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
